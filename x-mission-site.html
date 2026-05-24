@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X를 찾아서 · 숨겨진 X를 찾아라</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Gothic+A1:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2a1f12;          /* dark sepia text */
+    --brown:#5e4327;        /* secondary text */
+    --mute:#8a7355;         /* muted text */
+    --rust:#a8351d;         /* poster red — accent */
+    --rust-dk:#7f2413;
+    --rust-br:#c8492c;
+    --sand:#e7d3a8;         /* light sand */
+    --sand-dp:#d4b986;      /* deeper sand */
+    --paper:#efe2c4;        /* aged paper */
+    --paper-dk:#e3d0a5;
+    --bg:#cdb482;           /* page — desert */
+    --bg-deep:#b89d6c;
+    --card:#f4ead2;         /* card surface — parchment */
+    --line:#bba madeup;
+    --line:#c2a878;
+    --ink-soft:#46341f;
+    --night:#1c1408;        /* footer / dark band */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Gothic A1',sans-serif;color:var(--ink);line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(244,234,210,.7), transparent 55%),
+      radial-gradient(ellipse at 80% 100%, rgba(124,36,19,.18), transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ============ NAV ============ */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(28,20,8,.93);backdrop-filter:blur(8px);
+    border-bottom:2px solid var(--rust-dk);
+  }
+  .nav-in{
+    max-width:1080px;margin:0 auto;padding:0 26px;height:62px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:var(--sand);}
+  .brand .mark{
+    width:34px;height:34px;border-radius:6px;
+    background:var(--rust);color:#f4ead2;display:grid;place-items:center;
+    font-family:'Black Han Sans',sans-serif;font-size:20px;
+    transform:rotate(-5deg);box-shadow:0 2px 0 var(--rust-dk);
+  }
+  .nav-links{display:flex;gap:28px;}
+  .nav-links a{font-size:14px;font-weight:700;color:#cbb78f;transition:color .15s;}
+  .nav-links a:hover{color:var(--rust-br);}
+  .nav-cta{
+    font-family:'Gothic A1';font-weight:800;font-size:13px;cursor:pointer;
+    background:var(--rust);color:#f4ead2;border:none;border-radius:6px;
+    padding:9px 18px;transition:background .15s;letter-spacing:.5px;
+  }
+  .nav-cta:hover{background:var(--rust-br);}
+  @media(max-width:680px){.nav-links{display:none;}}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;overflow:hidden;
+    border-bottom:3px solid var(--rust-dk);
+    background:
+      linear-gradient(180deg, rgba(46,33,15,.12), rgba(205,180,130,.05) 40%, rgba(124,36,19,.14)),
+      var(--bg-deep);
+  }
+  .hero::before{
+    content:"✦ ✕ ✦";position:absolute;top:18px;right:30px;
+    font-size:14px;color:rgba(124,36,19,.3);letter-spacing:6px;
+  }
+  .hero-in{
+    max-width:1080px;margin:0 auto;padding:64px 26px 70px;
+    display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center;
+  }
+  @media(max-width:820px){
+    .hero-in{grid-template-columns:1fr;gap:30px;padding:46px 26px 52px;}
+  }
+  .eyebrow{
+    display:inline-block;font-family:'Gowun Batang',serif;font-style:italic;
+    font-size:14px;color:var(--brown);margin-bottom:10px;
+  }
+  .hero h1{
+    font-family:'Black Han Sans',sans-serif;font-weight:400;
+    font-size:clamp(52px,10vw,104px);line-height:.95;letter-spacing:-2px;
+    color:var(--ink);margin:6px 0;
+    text-shadow:3px 3px 0 rgba(124,36,19,.18);
+  }
+  .hero h1 .x{
+    color:var(--rust);font-size:1.18em;
+    display:inline-block;transform:rotate(-4deg);
+    text-shadow:4px 4px 0 var(--rust-dk);
+  }
+  .hero .tagline{
+    display:inline-block;margin-top:10px;
+    background:var(--ink);color:var(--sand);
+    font-weight:800;font-size:clamp(15px,2.6vw,21px);
+    padding:8px 20px;transform:rotate(-1.5deg);letter-spacing:1px;
+    box-shadow:4px 4px 0 rgba(124,36,19,.4);
+  }
+  .hero .tagline .x{color:var(--rust-br);}
+  .hero p.lead{
+    margin-top:24px;font-size:15.5px;color:var(--ink-soft);max-width:430px;
+  }
+  .hero-actions{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap;}
+  .btn{
+    font-family:'Gothic A1';font-weight:800;cursor:pointer;border:none;
+    transition:transform .08s,background .15s,box-shadow .15s;letter-spacing:.5px;
+  }
+  .btn:active{transform:translateY(2px);}
+  .btn-primary{
+    background:var(--rust);color:#f4ead2;font-size:15px;padding:14px 28px;
+    border-radius:4px;box-shadow:0 5px 0 var(--rust-dk);
+  }
+  .btn-primary:active{box-shadow:0 2px 0 var(--rust-dk);}
+  .btn-primary:hover{background:var(--rust-br);}
+  .btn-outline{
+    background:var(--paper);color:var(--rust-dk);
+    border:2px solid var(--rust-dk);border-radius:4px;
+    font-size:15px;padding:12px 24px;
+  }
+  .btn-outline:hover{background:var(--paper-dk);}
+
+  /* hero side — the mystery letter */
+  .letter{
+    background:var(--paper);
+    border:1px solid var(--line);
+    padding:30px 28px;transform:rotate(2deg);
+    box-shadow:0 14px 36px rgba(46,33,15,.32);
+    position:relative;
+  }
+  .letter::before{
+    content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(-6deg);
+    width:90px;height:26px;background:rgba(168,53,29,.22);
+    border:1px dashed rgba(124,36,19,.4);
+  }
+  .letter .stamp{
+    position:absolute;top:-16px;right:20px;width:54px;height:54px;
+    background:var(--rust);color:#f4ead2;border-radius:50%;
+    display:grid;place-items:center;font-family:'Black Han Sans',sans-serif;
+    font-size:30px;transform:rotate(12deg);
+    box-shadow:0 3px 8px rgba(0,0,0,.3);border:2px dashed rgba(244,234,210,.6);
+  }
+  .letter h3{
+    font-family:'Gowun Batang',serif;font-size:15px;font-weight:700;
+    color:var(--rust-dk);margin-bottom:14px;letter-spacing:.5px;
+  }
+  .fact-row{
+    display:flex;justify-content:space-between;padding:9px 0;
+    border-bottom:1px dashed var(--line);font-size:13.5px;
+  }
+  .fact-row:last-child{border-bottom:none;}
+  .fact-row .k{color:var(--mute);font-weight:600;}
+  .fact-row .v{font-weight:800;color:var(--ink);}
+
+  /* ============ SECTION SHELL ============ */
+  section{max-width:1080px;margin:0 auto;padding:62px 26px;}
+  .sec-head{margin-bottom:32px;}
+  .sec-tag{
+    font-family:'Gowun Batang',serif;font-style:italic;
+    font-size:14px;color:var(--rust);
+  }
+  .sec-head h2{
+    font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:34px;
+    letter-spacing:-.5px;margin-top:4px;color:var(--ink);
+  }
+  .sec-head p{color:var(--brown);font-size:14.5px;margin-top:7px;max-width:560px;}
+
+  /* ============ GENERATOR ============ */
+  #generator{
+    background:var(--bg-deep);max-width:none;
+    border-top:3px solid var(--rust-dk);border-bottom:3px solid var(--rust-dk);
+  }
+  .gen-shell{max-width:1080px;margin:0 auto;}
+  .gen-grid{display:grid;grid-template-columns:300px 1fr;gap:26px;}
+  @media(max-width:780px){.gen-grid{grid-template-columns:1fr;}}
+
+  .gen-panel{
+    background:var(--card);border:2px solid var(--line);
+    padding:24px;height:fit-content;
+    box-shadow:6px 6px 0 rgba(124,36,19,.22);
+  }
+  .gen-panel h3{font-family:'Gowun Batang',serif;font-size:17px;font-weight:700;margin-bottom:3px;}
+  .gen-panel .ph{font-size:12.5px;color:var(--mute);margin-bottom:18px;}
+  .field{margin-bottom:15px;}
+  .field label{
+    display:block;font-size:12px;font-weight:800;color:var(--rust-dk);
+    letter-spacing:.5px;margin-bottom:6px;
+  }
+  .field select{
+    width:100%;font-family:'Gothic A1';font-size:14px;font-weight:600;
+    padding:10px 12px;border:1.5px solid var(--line);border-radius:3px;
+    background:var(--paper);color:var(--ink);cursor:pointer;
+  }
+  .field select:focus{outline:2px solid var(--rust);border-color:var(--rust);}
+  .btn-gen{
+    width:100%;background:var(--rust);color:#f4ead2;font-size:15px;padding:14px;
+    border-radius:4px;box-shadow:0 5px 0 var(--rust-dk);margin-top:6px;
+  }
+  .btn-gen:hover{background:var(--rust-br);}
+  .btn-gen:active{box-shadow:0 2px 0 var(--rust-dk);}
+
+  /* result */
+  .result-wrap{min-height:100%;}
+  .result-empty{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;height:100%;min-height:340px;
+    border:2px dashed var(--rust-dk);color:var(--mute);
+    background:var(--card);padding:30px;
+  }
+  .result-empty .ic{
+    font-family:'Black Han Sans',sans-serif;font-size:60px;
+    color:var(--rust);opacity:.45;transform:rotate(-6deg);margin-bottom:8px;
+  }
+  .result-empty .t{font-weight:800;color:var(--brown);font-size:15px;}
+  .result-empty .s{font-size:13px;margin-top:5px;}
+
+  .result-card{
+    background:var(--card);border:2px solid var(--line);
+    overflow:hidden;box-shadow:8px 8px 0 rgba(124,36,19,.28);
+    animation:rise .35s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  .rc-head{
+    background:var(--ink);color:var(--sand);padding:22px 24px;
+    position:relative;
+  }
+  .rc-head::after{
+    content:"✕";position:absolute;top:14px;right:20px;
+    font-family:'Black Han Sans',sans-serif;font-size:38px;
+    color:rgba(200,73,44,.4);
+  }
+  .rc-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
+  .rc-pill{
+    font-size:11px;font-weight:800;letter-spacing:.5px;
+    background:var(--rust);color:#f4ead2;padding:3px 10px;border-radius:3px;
+  }
+  .rc-name{font-family:'Black Han Sans',sans-serif;font-size:25px;line-height:1.15;}
+  .rc-sub{font-size:13px;color:var(--sand-dp);margin-top:4px;font-weight:600;}
+  .rc-body{padding:22px 24px;}
+  .rc-seg{margin-bottom:16px;}
+  .rc-seg:last-child{margin-bottom:0;}
+  .rc-seg .sh{
+    font-size:11px;font-weight:900;letter-spacing:1px;color:var(--rust-dk);
+    text-transform:uppercase;display:flex;align-items:center;gap:7px;
+  }
+  .rc-seg .sh::before{content:"✕";color:var(--rust);font-size:10px;}
+  .rc-seg .sv{font-size:14px;color:var(--ink-soft);margin-top:4px;}
+  .rc-seg ol{margin:5px 0 0 19px;font-size:14px;color:var(--ink-soft);}
+  .rc-seg ol li{margin-bottom:5px;}
+  .rc-foot{
+    background:var(--paper-dk);padding:13px 24px;font-size:12.5px;
+    color:var(--brown);font-style:italic;border-top:1px dashed var(--line);
+  }
+  .rc-actions{display:flex;gap:9px;padding:16px 24px 20px;flex-wrap:wrap;}
+  .btn-sm{font-size:13px;padding:10px 17px;font-weight:800;border-radius:3px;}
+  .btn-save{background:var(--ink);color:var(--sand);}
+  .btn-save:hover{background:#3c2c19;}
+  .btn-save:disabled{opacity:.45;cursor:default;}
+  .btn-redraw{background:var(--paper);border:1.5px solid var(--line);color:var(--brown);}
+  .btn-redraw:hover{border-color:var(--rust);}
+
+  /* ============ LIBRARY ============ */
+  .lib-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media(max-width:720px){.lib-grid{grid-template-columns:1fr;}}
+  .lib-card{
+    background:var(--card);border:1.5px solid var(--line);
+    padding:20px;transition:transform .18s,box-shadow .18s;
+    box-shadow:4px 4px 0 rgba(124,36,19,.16);
+  }
+  .lib-card:nth-child(even){transform:rotate(.6deg);}
+  .lib-card:nth-child(odd){transform:rotate(-.6deg);}
+  .lib-card:hover{
+    transform:rotate(0) translateY(-3px);
+    box-shadow:6px 8px 0 rgba(124,36,19,.28);
+  }
+  .lib-day{
+    font-size:11px;font-weight:800;letter-spacing:.5px;color:#f4ead2;
+    padding:3px 10px;display:inline-block;
+  }
+  .lib-card h4{
+    font-family:'Gowun Batang',serif;font-size:18px;font-weight:700;
+    margin:11px 0 3px;
+  }
+  .lib-fmt{font-size:12.5px;color:var(--rust);font-weight:800;}
+  .lib-desc{font-size:13.5px;color:var(--brown);margin-top:9px;}
+  .lib-meta{
+    margin-top:13px;padding-top:11px;border-top:1px dashed var(--line);
+    font-size:12px;color:var(--mute);
+  }
+
+  /* ============ SAVED ============ */
+  #saved{background:var(--bg-deep);max-width:none;border-top:3px solid var(--rust-dk);}
+  .saved-shell{max-width:1080px;margin:0 auto;}
+  .saved-empty{
+    text-align:center;color:var(--mute);font-size:13.5px;
+    padding:34px;border:2px dashed var(--rust-dk);background:var(--card);
+  }
+  .saved-row{
+    background:var(--card);border:1.5px solid var(--line);
+    padding:15px 18px;margin-bottom:10px;display:flex;gap:14px;align-items:center;
+    box-shadow:3px 3px 0 rgba(124,36,19,.14);
+  }
+  .saved-row .sb{flex:1;}
+  .saved-row .sn{font-family:'Gowun Batang',serif;font-size:16px;font-weight:700;}
+  .saved-row .stags{font-size:12px;color:var(--mute);margin-top:2px;}
+  .saved-x{
+    background:var(--paper);border:1.5px solid var(--line);
+    color:var(--brown);cursor:pointer;font-size:13px;padding:7px 12px;
+    font-family:'Gothic A1';font-weight:800;border-radius:3px;
+  }
+  .saved-x:hover{border-color:var(--rust);color:var(--rust-dk);}
+  .saved-tools{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--night);color:#a08c66;padding:38px 26px;
+    border-top:3px solid var(--rust-dk);
+  }
+  .foot-in{
+    max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;
+    align-items:center;gap:20px;flex-wrap:wrap;
+  }
+  .foot-brand{display:flex;align-items:center;gap:10px;color:var(--sand);font-weight:800;}
+  .foot-brand .mark{
+    width:32px;height:32px;border-radius:6px;background:var(--rust);
+    display:grid;place-items:center;font-family:'Black Han Sans',sans-serif;
+    font-size:18px;color:#f4ead2;transform:rotate(-5deg);
+  }
+  .foot-note{font-size:12.5px;color:#7d6a4a;max-width:430px;text-align:right;}
+
+  @media print{
+    .nav,.hero,#library,footer,.gen-panel,.rc-actions,.saved-tools,.sec-tag{display:none!important;}
+    body{background:#fff;}
+    section{padding:16px 0;}
+    .result-card,.saved-row{box-shadow:none;border:1px solid #ccc;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-in">
+    <div class="brand">
+      <span class="mark">X</span>
+      <span>X를 찾아서</span>
+    </div>
+    <div class="nav-links">
+      <a href="#generator">미션 생성</a>
+      <a href="#library">교안 단서</a>
+      <a href="#saved">수집한 단서</a>
+    </div>
+    <button class="nav-cta" onclick="document.getElementById('generator').scrollIntoView()">
+      X 찾으러 가기
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="hero-in">
+    <div>
+      <span class="eyebrow">광야 끝에서 발견된 의문의 편지 — 그 편지는 당신의 이름을 알고 있었다</span>
+      <h1><span class="x">X</span>를 찾아서</h1>
+      <div class="tagline">숨겨진 <span class="x">X</span>를 찾아라</div>
+      <p class="lead">
+        새문안수양관 곳곳에 흩어진 미션을 추적하세요. 일차 주제와 지형, 형식을 고르면
+        교안 스타일의 미션 게임 아이디어가 단서 카드로 펼쳐집니다.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="document.getElementById('generator').scrollIntoView()">
+          미션 추적 시작
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('library').scrollIntoView()">
+          교안 단서 보기
+        </button>
+      </div>
+    </div>
+    <div class="letter">
+      <span class="stamp">X</span>
+      <h3>의문의 편지 · 수련회 정보</h3>
+      <div class="fact-row"><span class="k">장소</span><span class="v">새문안수양관 (가평 운악산)</span></div>
+      <div class="fact-row"><span class="k">대상</span><span class="v">중고등부 14–18세</span></div>
+      <div class="fact-row"><span class="k">규모</span><span class="v">30명 이상 · 5–7명 1팀</span></div>
+      <div class="fact-row"><span class="k">일정</span><span class="v">2박 3일</span></div>
+      <div class="fact-row"><span class="k">주제</span><span class="v">하나님 나라, 하나님의 방식으로</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GENERATOR ============ -->
+<section id="generator">
+  <div class="gen-shell">
+    <div class="sec-head">
+      <div class="sec-tag">— 단서를 조합하라 —</div>
+      <h2>미션 게임 생성기</h2>
+      <p>일차 주제와 수양관 지형, 게임 형식을 고르면 교안 스타일의 미션 단서 카드를 만들어 드립니다.</p>
+    </div>
+    <div class="gen-grid">
+      <div class="gen-panel">
+        <h3>단서 조합</h3>
+        <p class="ph">조건을 고르고 X를 추적하세요.</p>
+        <div class="field">
+          <label>일차 / 주제</label>
+          <select id="dDay">
+            <option value="any">전체 (랜덤)</option>
+            <option value="day1">1일차 · 하나님의 주권</option>
+            <option value="day2">2일차 · 복음의 승리</option>
+            <option value="day3">3일차 · 성화와 파송</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>수양관 지형</label>
+          <select id="dTerrain">
+            <option value="any">전체 (자동)</option>
+            <option value="yard">수양관 마당</option>
+            <option value="forest">숲 산책로</option>
+            <option value="valley">계곡 / 징검다리</option>
+            <option value="flat">계곡가 평지</option>
+            <option value="hall">강의실 / 실내</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>게임 형식</label>
+          <select id="dFormat">
+            <option value="any">전체 (자동 추천)</option>
+            <option value="discuss">팀 대항 토론</option>
+            <option value="hunt">보물찾기 / 단서 추적</option>
+            <option value="quiz">성경 퀴즈쇼</option>
+            <option value="roleplay">롤플레이 / 재연</option>
+            <option value="build">팀 프로젝트 / 만들기</option>
+            <option value="reflect">개인 묵상 / 결단</option>
+          </select>
+        </div>
+        <button class="btn btn-gen" id="genBtn">✕ 미션 단서 생성</button>
+      </div>
+      <div class="result-wrap" id="resultWrap">
+        <div class="result-empty">
+          <div class="ic">X</div>
+          <div class="t">아직 추적한 단서가 없습니다</div>
+          <div class="s">왼쪽에서 조건을 고르고 "미션 단서 생성"을 눌러보세요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIBRARY ============ -->
+<section id="library">
+  <div class="sec-head">
+    <div class="sec-tag">— 교안에 숨겨진 단서 —</div>
+    <h2>교안에 담긴 미션 활동</h2>
+    <p>미션 코스 교안에 명시된 다섯 가지 레크리에이션 활동입니다. 생성기 단서의 바탕이 됩니다.</p>
+  </div>
+  <div class="lib-grid" id="libGrid"></div>
+</section>
+
+<!-- ============ SAVED ============ -->
+<section id="saved">
+  <div class="saved-shell">
+    <div class="sec-head">
+      <div class="sec-tag">— 추적 기록 —</div>
+      <h2>수집한 미션 단서</h2>
+      <p>생성한 미션 중 마음에 드는 것을 모아 비교하고, 인쇄해 팀에 나눠주세요.</p>
+    </div>
+    <div id="savedList"></div>
+    <div class="saved-tools">
+      <button class="btn btn-outline btn-sm" id="printBtn">🖨 단서 인쇄 / PDF</button>
+      <button class="btn btn-outline btn-sm" id="clearBtn">↺ 추적 기록 비우기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-brand">
+      <span class="mark">X</span>
+      <span>X를 찾아서</span>
+    </div>
+    <div class="foot-note">
+      하나님 나라, 하나님의 방식으로 · 새문안수양관 미션 코스 교안 참고<br>
+      수집한 단서는 이 브라우저에 저장됩니다
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ================= LIBRARY DATA ================= */
+const LIB=[
+  {day:'1일차 16:30',color:'#7f2413',title:'교리 레크리에이션 1',fmt:'팀 대항 토론',
+   desc:'세상의 방식 vs 하나님의 방식을 상황 카드로 토론하며, 교리 강의 1 "하나님의 주권"을 몸으로 체험합니다.',
+   meta:'장소 수양관 마당 · 1시간 · 시편 24:1'},
+  {day:'1일차 17:30',color:'#5e4327',title:'자유시간 팀 친교',fmt:'보물찾기 미션',
+   desc:'숲·마당·건물 주변에 숨긴 단서를 찾으며 팀워크를 형성하고, 하나님의 주권을 자연 속 놀이로 체험합니다.',
+   meta:'장소 수양관 전 구역 · 1시간 30분'},
+  {day:'2일차 13:30',color:'#7f2413',title:'교리 레크리에이션 2',fmt:'퀴즈쇼 + 롤플레이',
+   desc:'성경 퀴즈쇼와 요셉·다니엘·에스더 롤플레이로 전적 타락과 복음의 승리를 직접 체험합니다.',
+   meta:'장소 마당 + 계곡 징검다리 · 2시간 · 요한복음 16:33'},
+  {day:'2일차 15:30',color:'#a8351d',title:'팀 프로젝트 + 발표',fmt:'발표 준비 + 3분 발표',
+   desc:'"우리 학교/반에서 하나님의 방식으로 승리하는 법"을 진단·대안·실천 계획까지 세워 발표합니다.',
+   meta:'장소 강의실 / 야외 · 2시간 30분'},
+  {day:'3일차 10:30',color:'#5e4327',title:'하나님 나라 시민 선언서',fmt:'개인 묵상 + 결단',
+   desc:'계곡가 평지에서 세상의 방식을 고백하고 하나님의 방식을 결단하며, 소그룹 안에서 나누고 함께 기도합니다.',
+   meta:'장소 계곡가 평지 · 30분 · 로마서 12:1'}
+];
+
+/* ================= GENERATOR DATA ================= */
+const THEMES={
+  day1:{label:'1일차 · 나는 어느 나라 사람인가?',doctrine:'하나님의 주권',
+    verses:['시편 24:1','다니엘 1장','웨스트민스터 소요리문답 1문'],
+    concepts:['세상의 왕과 하나님의 왕을 가르기','내가 어느 나라 시민인지 고백하기','다니엘처럼 거절할 세상의 방식 찾기']},
+  day2:{label:'2일차 · 세상의 방식은 왜 무너지는가?',doctrine:'전적 타락과 복음의 승리',
+    verses:['예레미야 17:9','요한복음 16:33','전도서 1장'],
+    concepts:['세상의 방식이 무너지는 지점 찾기','복음이 이기는 방법 체험하기','요셉·다니엘·에스더의 선택 재연하기']},
+  day3:{label:'3일차 · 하나님의 방식으로 세상으로 나가라',doctrine:'성화와 파송',
+    verses:['로마서 12:1','빌립보서 4:11–13','마태복음 5:13–16'],
+    concepts:['매일의 훈련 계획 세우기','말씀·기도·공동체로 결단하기','세상의 빛과 소금으로 파송받기']}
+};
+const TERRAINS={
+  yard:{name:'수양관 마당',use:'팀별로 마당 모서리에 자리잡고 진행자는 중앙에서 진행. 전체 집합·발표에 적합.'},
+  forest:{name:'숲 산책로',use:'산책로를 따라 미션 지점을 배치. 자연을 관찰하는 활동에 적합.'},
+  valley:{name:'계곡 / 징검다리',use:'징검다리를 "여정"의 동선으로 활용. 건너기·이동 활동에 적합 — 안전 교사 1명 필수.'},
+  flat:{name:'계곡가 평지',use:'물소리가 들리는 조용한 공간. 개인 묵상·기록·나눔에 적합.'},
+  hall:{name:'강의실 / 실내',use:'날씨와 무관하게 안정적. 화이트보드·전지를 쓰는 준비·발표 활동에 적합.'}
+};
+const FORMATS={
+  discuss:{label:'팀 대항 토론',terr:['yard','hall'],
+    flow:['진행자가 청소년 일상의 딜레마 상황 카드를 낭독','팀을 "세상의 방식"과 "하나님의 방식" 입장으로 나눔',
+          '각 입장에서 성경 구절을 근거로 주장 펼치기','전체 토의 후 교역자가 교리 핵심으로 정리','팀 대표가 깨달은 한 문장을 선포'],
+    prep:'상황 카드 10장+ · 팀별 메모지·펜 · 타이머',
+    care:'특정 학생의 실제 경험을 예시로 들지 않도록 상황 카드는 일반적으로 구성.'},
+  hunt:{label:'보물찾기 / 단서 추적',terr:['forest','valley','yard'],
+    flow:['출발 지점에서 첫 단서 봉투 배부','각 단서가 다음 위치와 미션을 알려주는 연쇄 구조',
+          '미션마다 주제 관련 관찰·기록·퀴즈 과제 수행','단서를 모두 통과하면 최종 보물 위치 공개','최종 보물에 다음 일정 힌트와 팀 간식 배치'],
+    prep:'단서 봉투 4–5세트 · 미션 카드 · 기록지 · 최종 보물(간식 등)',
+    care:'봉투 위치를 지도에 표시하고 전 구역에 교사를 분산 배치.'},
+  quiz:{label:'성경 퀴즈쇼',terr:['yard','hall'],
+    flow:['소그룹별 자리 배치, 답안지와 매직 배부','교리 강의 범위에서 10–15문제 출제',
+          '문제당 30초–1분 팀 토의 후 답안 동시 제출','정답 공개 시 교역자가 교리 내용으로 짧게 연결','경쟁보다 함께 배움에 초점 — 전체 팀 격려 박수'],
+    prep:'문제 세트 · 팀별 화이트보드·매직 · 점수판',
+    care:'난이도를 섞어 출제해 특정 팀만 소외되지 않도록 함.'},
+  roleplay:{label:'롤플레이 / 재연',terr:['valley','forest','hall'],
+    flow:['3인 1팀으로 역할 분담 — 세상의 방식 / 하나님의 방식 / 내레이터','성경 본문의 주요 장면을 팀별로 선택',
+          '내레이터가 장면을 읽고 두 역할이 반응을 재연','세상의 방식과 하나님의 방식이 낳는 결과를 대비','전체가 함께 핵심 대사를 따라 말하며 마무리'],
+    prep:'장면별 대본 카드 · 간단한 소품 · 내레이션 지문',
+    care:'즉흥 연기가 부담스러운 학생은 내레이터·소품 담당으로 배려.'},
+  build:{label:'팀 프로젝트 / 만들기',terr:['hall','yard'],
+    flow:['주제 과제 제시 — 진단·대안·실천 계획 포함','팀별로 분산해 준비 시간 확보',
+          '"누가·언제·어떻게"가 담긴 행동 계획 작성','전지·화이트보드에 시각화','팀당 3분 발표 후 격려 중심 피드백'],
+    prep:'전지·화이트보드 · 마커·색펜 · 발표 타이머',
+    care:'비판적 평가 금지 — 모든 피드백은 격려 중심으로.'},
+  reflect:{label:'개인 묵상 / 결단',terr:['flat'],
+    flow:['조용한 공간에서 개인 묵상 시간 안내','정해진 양식에 따라 고백·결단·다짐을 기록',
+          '강요 없이 원하는 학생만 소그룹에서 나눔','나눔 후 서로를 위해 함께 기도','기록한 결단문은 교사가 보관해 후속 점검'],
+    prep:'결단문 양식지 · 펜 · 조용한 배경 음악(선택)',
+    care:'강압적 결신 유도 금지. 결단 내용은 비밀 보장을 사전 공지.'}
+};
+const NAME_HEAD={day1:['왕국','주권','시민권'],day2:['역전','복음','이김'],day3:['파송','빛소금','전진']};
+const NAME_TAIL={discuss:'대토론',hunt:'보물 원정',quiz:'퀴즈 챌린지',roleplay:'드라마 미션',build:'작전 회의',reflect:'고요한 코스'};
+const DAY_TAG={day1:'1일차',day2:'2일차',day3:'3일차'};
+
+function pick(a){return a[Math.random()*a.length|0];}
+function keys(o){return Object.keys(o);}
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ================= STATE ================= */
+const LS='x_mission_v1';
+let saved=[];
+let current=null;
+try{const r=localStorage.getItem(LS);if(r)saved=JSON.parse(r);}catch(e){saved=[];}
+function persist(){try{localStorage.setItem(LS,JSON.stringify(saved));}catch(e){}}
+
+/* ================= RENDER LIBRARY ================= */
+function renderLibrary(){
+  const grid=document.getElementById('libGrid');
+  grid.innerHTML='';
+  LIB.forEach(m=>{
+    const c=document.createElement('div');
+    c.className='lib-card';
+    c.innerHTML=`
+      <span class="lib-day" style="background:${m.color};">${esc(m.day)}</span>
+      <h4>${esc(m.title)}</h4>
+      <div class="lib-fmt">${esc(m.fmt)}</div>
+      <div class="lib-desc">${esc(m.desc)}</div>
+      <div class="lib-meta">${esc(m.meta)}</div>`;
+    grid.appendChild(c);
+  });
+}
+
+/* ================= GENERATOR ================= */
+function buildMission(){
+  const dDay=document.getElementById('dDay').value;
+  const dTerr=document.getElementById('dTerrain').value;
+  const dFmt=document.getElementById('dFormat').value;
+
+  const themeKey=dDay==='any'?pick(keys(THEMES)):dDay;
+  const theme=THEMES[themeKey];
+
+  let fmtKey;
+  if(dFmt!=='any') fmtKey=dFmt;
+  else if(dTerr!=='any'){
+    const fits=keys(FORMATS).filter(f=>FORMATS[f].terr.includes(dTerr));
+    fmtKey=fits.length?pick(fits):pick(keys(FORMATS));
+  }else fmtKey=pick(keys(FORMATS));
+  const fmt=FORMATS[fmtKey];
+
+  const terrKey=dTerr!=='any'?dTerr:pick(fmt.terr);
+  const terr=TERRAINS[terrKey];
+
+  return {
+    name:'하나님의 방식 '+pick(NAME_HEAD[themeKey])+' '+(NAME_TAIL[fmtKey]||'미션'),
+    dayTag:DAY_TAG[themeKey],doctrine:theme.doctrine,
+    fmtLabel:fmt.label,terrName:terr.name,terrUse:terr.use,
+    concept:pick(theme.concepts),verse:pick(theme.verses),
+    flow:fmt.flow.slice(),prep:fmt.prep,care:fmt.care
+  };
+}
+
+function cardHtml(c,saveable){
+  return `
+  <div class="result-card">
+    <div class="rc-head">
+      <div class="rc-pills">
+        <span class="rc-pill">${esc(c.dayTag)}</span>
+        <span class="rc-pill">${esc(c.doctrine)}</span>
+      </div>
+      <div class="rc-name">${esc(c.name)}</div>
+      <div class="rc-sub">${esc(c.fmtLabel)} · ${esc(c.terrName)}</div>
+    </div>
+    <div class="rc-body">
+      <div class="rc-seg">
+        <div class="sh">미션 콘셉트</div>
+        <div class="sv">${esc(c.concept)}</div>
+      </div>
+      <div class="rc-seg">
+        <div class="sh">진행 단계</div>
+        <ol>${c.flow.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>
+      </div>
+      <div class="rc-seg">
+        <div class="sh">지형 활용 · ${esc(c.terrName)}</div>
+        <div class="sv">${esc(c.terrUse)}</div>
+      </div>
+      <div class="rc-seg">
+        <div class="sh">준비물</div>
+        <div class="sv">${esc(c.prep)}</div>
+      </div>
+      <div class="rc-seg">
+        <div class="sh">핵심 구절</div>
+        <div class="sv">${esc(c.verse)}</div>
+      </div>
+    </div>
+    <div class="rc-foot">진행 주의 · ${esc(c.care)}</div>
+    ${saveable?`<div class="rc-actions">
+      <button class="btn btn-sm btn-save" id="saveBtn">✕ 이 단서 수집</button>
+      <button class="btn btn-sm btn-redraw" id="redrawBtn">↻ 다시 추적</button>
+    </div>`:''}
+  </div>`;
+}
+
+function generate(){
+  current=buildMission();
+  const wrap=document.getElementById('resultWrap');
+  wrap.innerHTML=cardHtml(current,true);
+  document.getElementById('saveBtn').onclick=()=>{
+    saved.unshift(current); persist(); renderSaved();
+    const b=document.getElementById('saveBtn');
+    b.textContent='✓ 수집됨'; b.disabled=true;
+  };
+  document.getElementById('redrawBtn').onclick=generate;
+}
+
+/* ================= RENDER SAVED ================= */
+function renderSaved(){
+  const list=document.getElementById('savedList');
+  list.innerHTML='';
+  if(saved.length===0){
+    list.innerHTML='<div class="saved-empty">아직 수집한 단서가 없습니다. 생성기에서 미션을 만들고 "✕ 수집"을 눌러보세요.</div>';
+    return;
+  }
+  saved.forEach((c,i)=>{
+    const row=document.createElement('div');
+    row.className='saved-row';
+    row.innerHTML=`
+      <div class="sb">
+        <div class="sn">${esc(c.name)}</div>
+        <div class="stags">${esc(c.dayTag)} · ${esc(c.fmtLabel)} · ${esc(c.terrName)}</div>
+      </div>
+      <button class="saved-x" title="삭제">✕ 삭제</button>`;
+    row.querySelector('.saved-x').onclick=()=>{ saved.splice(i,1); persist(); renderSaved(); };
+    list.appendChild(row);
+  });
+}
+
+/* ================= EVENTS ================= */
+document.getElementById('genBtn').onclick=generate;
+document.getElementById('printBtn').onclick=()=>window.print();
+document.getElementById('clearBtn').onclick=()=>{
+  if(saved.length && confirm('수집한 단서를 모두 비울까요?')){
+    saved=[]; persist(); renderSaved();
+  }
+};
+
+/* ================= INIT ================= */
+renderLibrary(); renderSaved();
+</script>
+</body>
+</html>
